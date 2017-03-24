@@ -1,0 +1,11 @@
+table {
+    border: 1px;
+    border-style: solid;
+    padding: 5px;
+}
+body {
+    background-color: cadetblue;
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+}
