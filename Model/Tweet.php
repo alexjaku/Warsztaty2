@@ -1,6 +1,6 @@
 <?php
 
-require_once '/home/alex/Workspace/Warsztaty2/Controller/config.php';
+require_once(__DIR__ . '/../Controller/config.php');
 
 class Tweet {
     private $id, $userId, $text, $creationDate; 
@@ -47,16 +47,17 @@ class Tweet {
        
     }
 
-    function setCreationDate($creationDate) {
-        $this->creationDate = $creationDate;
+    function setCreationDate() {
+        $date = new DateTime();
+        $this->creationDate = ($date-> format('Y-m-d H:i:s'));
     }
 
     static function loadTweetById(PDO $conn, $id) {
-        $stmt = $conn -> prepare('SELECT FROM `Tweet` WHERE `id` = :id');
+        $stmt = $conn -> prepare('SELECT * FROM `Tweet` WHERE `id` = :id');
         $result = $stmt -> execute(['id' => $id]);
         
         if ($result === true && $stmt -> rowCount() > 0) {
-            $row = $stmt -> fetch(PDO::FETCH_ASSOC);
+            $row = $stmt -> fetch(); //było PDO::FETCH_ASSOC
 
             $loadedTweet = new Tweet();
             $loadedTweet -> id = $row['id'];
@@ -70,19 +71,20 @@ class Tweet {
     }
     
     static function loadAllTweetsByUserId(PDO $conn, $userId) {
-        $stmt = $conn -> prepare('SELECT FROM `Tweet` WHERE `userId` = :userId') ;
+        $stmt = $conn -> prepare('SELECT * FROM `Tweet` WHERE `userId` = :userId') ;
         $results = $stmt -> execute(['userId' => $userId]);
-                        
+                                
             if ($results === true && $stmt -> rowCount() > 0) {
                 $tweetArrObj = [];
-                foreach ($results as $tweet) {
+                $rows = $stmt -> fetchAll();
+                foreach ($rows as $row) {
                     $loadedUserTweet = new Tweet();
-                    $loadedUserTweet -> id = $tweet['id'];
-                    $loadedUserTweet -> userId = $tweet['userId'];
-                    $loadedUserTweet -> text = $tweet['text'];       
-                    $loadedUserTweet -> creationDate = $tweet['creationDate'];
+                    $loadedUserTweet -> id = $row['id'];
+                    $loadedUserTweet -> userId = $row['userId'];
+                    $loadedUserTweet -> text = $row['text'];       
+                    $loadedUserTweet -> creationDate = $row['creationDate'];
                 
-                    $tweetArrObj = $loadedUserTweet;
+                    $tweetArrObj[] = $loadedUserTweet;
                 }
                 return $tweetArrObj ;
             } else {

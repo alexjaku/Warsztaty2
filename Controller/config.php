@@ -1,4 +1,5 @@
 <?php
+
 const DB_HOST ='localhost';
 const DB_PASSWORD = 'coderslab';
 const DB_NAME = 'warsztaty2';
@@ -10,5 +11,6 @@ $conn = new PDO('mysql:host='.DB_HOST.';dbname='.DB_NAME.';charset=utf8;',
                         DB_PASSWORD, [
                     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC ]
-  );
+                );
+
 ?>

@@ -4,6 +4,6 @@
 
 	session_unset();
 
-	header('Location: ../index.php');;
+	header("Location: __dir__/../../Views/log.php");
 
 ?>

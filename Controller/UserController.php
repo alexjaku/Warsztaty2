@@ -4,11 +4,11 @@ require_once '../Model/User.php';
 
 require_once 'config.php';
 
-$tweetPierwszyDB = new User; 
-$tweetPierwszyDB ->setUsername('alexjaku');
-$tweetPierwszyDB ->setEmail('alexjaku@mm.pl');
-$tweetPierwszyDB ->setPassword('nieogarniam');
-$tweetPierwszyDB ->saveToDB($conn);
+$newUser = new User; 
+$newUser ->setUsername('alexjaku');
+$newUser ->setEmail('alexjaku@mm.pl');
+$newUser ->setPassword('nieogarniam');
+$newUser ->saveToDB($conn);
 
 //$ja2 = new User; 
 //$ja2 ->setUsername('kasiex');

@@ -21,12 +21,13 @@ session_start();
     </form>
     
 <?php
+echo '<p> Pierwszy raz u nas? Utwórz konto: ' .
+         '<a href = "register.php"> Rejestracja </a> </p> ';
 
 if(isset($_SESSION['error'])) {
     echo $_SESSION['error'];
+    
 }
-echo '<p> Pierwszy raz u nas? Utwórz konto: ' .
-         '<a href = "register.php"> Rejestracja </a> </p> ';
 ?>
     
      </div>
