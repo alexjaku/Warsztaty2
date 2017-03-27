@@ -23,12 +23,32 @@ if ((!isset($_SESSION['logged'])) || ($_SESSION['logged']) == false) {
  require_once '__dir__/../../Controller/config.php';
  require_once '__dir__/../../Model/Tweet.php'; 
  require_once '__dir__/../../Model/User.php';
+ require_once '__dir__/../../Model/Comment.php';
 
  
  echo 'Witaj <b> ' . $_SESSION['username'] . '</b> na Tłiterze <br>';
  echo 'Zobacz co nowego piszczy w trawie u znajomych: <br> <br>';
 
- 
+ // do zmiennej wrzucam HTML z formularzem komentarza do tweeta i staram się go przypiąć
+ $tweetId = 0;
+$commentForm = 
+<<<EOD
+
+         <form action ="" method="POST">
+        <fieldset>
+        <label>
+            Komentarz:
+            <textarea name =" . $tweetId . " cols ="22" rows ="1" maxlength="140" 
+                      placeholder ="Odćwierkaj!"> 
+            </textarea>
+            <input type ="submit" value ="Wyślij!">
+                
+        </label>
+        </fieldset>
+    </form> 
+EOD;
+
+//pętla do wyświetlenia tweetów/postów
 $tweets = Tweet::loadAllTweets($conn);
 foreach($tweets as $oneTweet) {
     $user = User::loadUserById($conn, ($oneTweet -> getUserId()) ) -> getUsername();
@@ -36,9 +56,12 @@ foreach($tweets as $oneTweet) {
     echo '<table> <tr>';
     echo '<td> Użytkownik <b>' . $user . '</b> </td>' ;
     echo '<td> <a href = "post.php?tweetId=' . $tweetId . '"> napisał </a> </p>';
-    echo '<td>' . $oneTweet -> getText() . '<td>';
+    echo '<td>' . $oneTweet -> getText() . '</td>';
+    echo '<td>' . $commentForm . '</td>';
     echo '</tr> </table> ';
-    
+        
+    var_dump($_POST["$tweetId"]);
+  
 }
 
 //var_dump($tweets);
@@ -60,8 +83,23 @@ foreach($tweets as $oneTweet) {
     </form>
     
  <?php
+
+ //if do tworzenia nowych komentarzy
+ 
+ if(isset($_POST[$tweetId])){ 
+     //$newCommentText = $_POST[$tweetId];
+     $newComment = new Comment();
+     $newComment -> setUserId($_SESSION['id']);
+     $newComment -> setPostId($_POST[$tweetId]);                //co mu tutaj przypisać?
+     $newComment -> setCreationDate(); //-> format('Y-m-d H:i:s');
+     $newComment -> setText($_POST["$tweetId"]);
+     $newComment -> saveToDB($conn);
+     header ("Refresh: 0"); 
+ }
+ 
+ // if do tworzenia nowych tweetów
  if(isset($_POST['newTweet'])){ 
-     $newTweetText = $_POST['newTweet'];
+     //$newTweetText = $_POST['newTweet'];
      $newTweet = new Tweet();
      $newTweet -> setUserId($_SESSION['id']);
      $newTweet -> setCreationDate(); //-> format('Y-m-d H:i:s');
