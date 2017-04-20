@@ -21,9 +21,10 @@ class User {
         return $this->username;
     }
 
-    function getPassword() {
-        return $this->password;
-    }
+    // nie potrzebne, bo po co?
+//    function getPassword() {
+//        return $this->password;
+//    }
     
     function getHashPass() {
         return $this -> hashPass;

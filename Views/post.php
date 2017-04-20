@@ -42,10 +42,13 @@ if ('GET' === $_SERVER['REQUEST_METHOD']) {
 }
 
  
-echo '<p> Wyleć z gniazda: ' .
-         '<a href = "__dir__/../../Controller/logout.php"> Wyloguj się </a> </p> ';
-//var_dump($tweets);
-
+echo '<br> <p> Zalogowany jako: ' 
+    . '<a href = "user.php">' . $_SESSION['email'] . '</a>  '
+    . '<-Zobacz swoją stronę profilową </p>' ;
+echo '<p> Powrót do głównego gniazda: '
+        . '<a href = "main.php"> Strona główna </a> ';
+echo '<p> Opuść gniazdo: ' .
+        '<a href = "__dir__/../../Controller/logout.php"> Wyloguj się </a> </p> ';
   ?>
     
     

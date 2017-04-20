@@ -45,6 +45,9 @@ if(isset($_GET['id'])) {
         echo "Brak tweetów do wyświetlenia!";
     }
    
+    echo '<br> <p> Zalogowany jako: ' 
+    . '<a href = "user.php">' . $_SESSION['email'] . '</a>  '
+    . '<-Zobacz swoją stronę profilową </p>' ;
 }
 
 // --- jeśli nie GETem to wyświetlam zalogowanego użytkownika
@@ -71,10 +74,9 @@ else {
     
 }
 
-echo '<br> <p> Zalogowany jako: ' 
-    . '<a href = "user.php">' . $_SESSION['email'] . '</a>  '
-    . '<-Zobacz swoją stronę profilową </p>' ;
-echo '<p> Wyleć z gniazda: ' .
+echo '<p> Powrót do głównego gniazda: '
+        . '<a href = "main.php"> Strona główna </a> ';
+echo '<p> Opuść gniazdo: ' .
         '<a href = "__dir__/../../Controller/logout.php"> Wyloguj się </a> </p> ';
 
 

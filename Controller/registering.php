@@ -20,7 +20,7 @@ $email = trim($_POST['email']);
 $newUser = new User; 
 
 if(($_POST['password'] === $_POST['password2']) &&
-        // wczytuję usera o podanym loginiem, jeśli jest null, to ten login jest nowy
+        // wczytuję usera o podanym loginie, jeśli jest null, to ten login jest nowy
     (($newUser ->loadUserByEmail($conn, $email)) == null) &&
         //sprawdzam czy nick jest dłuższy równy 4
     strlen($name) >= 4) {
