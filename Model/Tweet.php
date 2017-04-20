@@ -122,7 +122,8 @@ class Tweet {
             $result = $stmt -> execute(
                         ['userId' => $this -> userId, 
                         'text' => $this -> text, 
-                        'creationDate' => $this -> creationDate]);
+                        'creationDate' => $this -> creationDate]
+                        );
             if ($result !== false) {
                 $this -> id = $conn ->lastInsertId();
                 return true;

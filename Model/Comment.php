@@ -1,5 +1,7 @@
 <?php
 
+require_once(__DIR__ . '/../Controller/config.php');
+
 class Comment { 
     
     private $id, $userId, $postId, $creationDate, $text; 
@@ -40,8 +42,9 @@ class Comment {
         $this->postId = $postId;
     }
 
-    function setCreationDate($creationDate) {
-        $this->creationDate = $creationDate;
+    function setCreationDate() {
+        $date = new DateTime();
+        $this->creationDate = ($date-> format('Y-m-d H:i:s'));
     }
 
     function setText($text) {
@@ -67,7 +70,7 @@ class Comment {
                 $loadedComment -> creationDate = $row['creationDate'];
                 $loadedComment -> text = $row['text'];
 
-                return $loadedTweet;
+                return $loadedComment;
             }
         } catch (Exception $ex) {
             echo 'Błąd ' . $ex -> getMessage();
@@ -77,7 +80,7 @@ class Comment {
     }
     
     static function loadAllCommentsByPostId(PDO $conn, $postId) {
-        $stmt = $conn -> prepare('SELECT * FROM `Tweet` WHERE `postId` = :postID');
+        $stmt = $conn -> prepare('SELECT * FROM `Comment` WHERE `postId` = :postId');
         
         try {
             $results = $stmt -> execute(['postId' => $postId]);
@@ -98,7 +101,7 @@ class Comment {
             return $commentArrObj;
             }
         } catch (Exception $ex) {
-            echo "Błąd" .$ex -> getMessage();
+            echo "Błąd z loadAllComments " .$ex -> getMessage();
         }
         
         return null;
@@ -107,10 +110,10 @@ class Comment {
     
     function saveToDB(PDO $conn) {
         
-        if ($this -> id =-1) {
+        if ($this -> id = -1) {
             $stmt = $conn -> prepare(
-                    'INSERT INTO `Comment` (`id`, `userId`, `postId`, `creationDate`, `text` 
-                    VALUES (:id, :userId, :postId, :creationDate, :text)'
+                    'INSERT INTO `Comment` (`userId`, `postId`, `creationDate`, `text`) 
+                    VALUES (:userId, :postId, :creationDate, :text)'
                     );
             
             $result = $stmt -> execute(
@@ -125,7 +128,7 @@ class Comment {
             }
         } else {
             $stmt = $conn -> prepare(
-                    'UPDATE `Tweet` SET '
+                    'UPDATE `Comment` SET '
                     . ' `userId` = :userId,'
                     . ' `postId` = :postId,'
                     . ' `text` = :text,'
