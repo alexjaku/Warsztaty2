@@ -26,75 +26,72 @@ if ((!isset($_SESSION['logged'])) || ($_SESSION['logged']) == false) {
  require_once '__dir__/../../Model/Comment.php';
 
  // --- nagłówek ---
- echo 'Witaj <b> ' . $_SESSION['username'] . '</b> na Tłiterze <br>';
- echo 'Zobacz co nowego piszczy w trawie u znajomych: <br> <br>';
+ echo '<p> Witaj <b> ' . $_SESSION['username'] . '</b> na Tłiterze <br>';
+ echo 'Zobacz co nowego piszczy w trawie u znajomych: <br> <br> </p>';
  
 //--- pętla do wyświetlenia tweetów/postów ---
  
 $tweets = Tweet::loadAllTweets($conn);
 foreach($tweets as $oneTweet) {
-    $user = User::loadUserById($conn, ($oneTweet -> getUserId()) ) -> getUsername();
+    $userName = User::loadUserById($conn,($oneTweet -> getUserId()) ) -> getUsername();
     $tweetId = ($oneTweet -> getId());
-    echo '<table> <tr>';
-    echo '<td> Użytkownik </td>' ;
-    echo '<td> <a href = "user.php?id=' . $oneTweet -> getUserId() 
-            . '">' . $user . '</a> </td>' ;
-    echo '<td> <a href = "post.php?tweetId=' . $tweetId . '"> wyśpiewał: </a> </td>';
-    echo '<td> "' .  $oneTweet -> getText() . '" </td> ';
+    echo '<table> '
+        . '<tr> <td>'
+        . 'Użytkownik <a href = "user.php?id=' . $oneTweet -> getUserId() 
+            . '">' . $userName . '</a>'
+        . ' <a href = "post.php?tweetId=' . $tweetId . '"> wyśpiewał: </a>'
+        . ' </td> </tr>';
+    echo '<tr> <td>' .  $oneTweet -> getText() . '</td> </tr>';
     
-    //-------Komentarze--------
+    //--- Komentarze ---
     
-    // do zmiennej wrzucam HTML z formularzem komentarza do tweeta i staram się go przypiąć
+     // do zmiennej wrzucam HTML z formularzem komentarza do tweeta i staram się go przypiąć
     $commentForm = 
 <<<EOD
             
-    <div> <form action ="" method="POST">
+    <tr> <td> <form action ="" method="POST">
         <fieldset>
         <label>
-            Komentarz:
-            <textarea name ="newComment" cols ="22" rows ="1" maxlength="140" 
+            Wytrelaj komentarz:
+            <input type="text" name ="newComment" maxlength=140 
                       placeholder ="Odćwierkaj!"> 
-            </textarea>
+            
             <input type ="submit" value ="Wyślij!">
             <input type="hidden" name="tweetId" value="$tweetId">
                 
         </label>
         </fieldset>
-    </div> </form> 
+    </td> </tr> </form> 
 EOD;
     
-       
-    echo '<tr> Komentarze do tego posta: <br> </tr>';
-    
-    echo ' <tr>';    
+    echo '<br> <tr> <td> <br> Komentarze do tego posta: </td> </tr>';
     $allcomments = Comment::loadAllCommentsByPostId($conn, $tweetId);
     
-    if(count($allcomments) > 0){
-        foreach($allcomments as $comment){
-            $authorOfComment = User::loadUserById($conn, $comment->getUserId());
-            echo '<div><span> Author:<a href="user.php?id='.$authorOfComment->getId().'">'.$authorOfComment->getUsername().'</a>  ';
-            echo $comment->getCreationDate() . '</span><br>';
-            echo $comment->getText().'</div>';
-            
+    if(count($allcomments) > 0) {
+        foreach($allcomments as $comment) {
+            $authorOfComment = User::loadUserById($conn, $comment -> getUserId());
+            echo '<tr> <td> <br> Autor <a href="user.php?id='.$authorOfComment->getId().'">'
+                    .$authorOfComment->getUsername().'</a>  odśpiewał: </td> </tr>';
+            echo '<tr> <td> "' . $comment->getText() . '" </td> </tr>';
         }
     } else {
-        echo "Brak komentarzy do wyświetlenia";
+        echo "<tr> <td> Cisza w lesie! </td> </tr>";
     }
     
-    echo '</tr> <br>';
-    echo '<tr> <td>' . $commentForm . '</td> </tr> </table>';
-  
+    echo '<tr> <td>' . $commentForm . '</td> </tr>';
+    echo '</table>';
+     
 }
-// --------------- nowy tweet w HTML-----------
-//var_dump($tweets);
 
-  ?>
-    
-    <form action ="" method="POST">
+// --- nowy tweet w HTML ---
+ 
+?>
+    <p>
+      <form action ="" method="POST">
         <fieldset>
         <label>
             Co chcesz dziś zaśpiewać? <br>
-            <textarea name ="newTweet" cols ="30" rows ="5" maxlength="140" 
+            <textarea name ="newTweet" cols ="30" rows ="5" maxlength=140 
                       placeholder ="Zaćwierkaj!"> 
             </textarea>
             <br>
@@ -102,10 +99,11 @@ EOD;
     
         </label>
         </fieldset>
-    </form>
-    
+    </form>  
+    </p>
+        
  <?php
-
+ 
  //if do tworzenia nowych komentarzy
  
  if(isset($_POST['newComment'])){ 
